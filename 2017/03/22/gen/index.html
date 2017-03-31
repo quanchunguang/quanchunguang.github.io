@@ -99,7 +99,7 @@ gen_server2 与gen_server相比 多了一个外部队列，进来的请求会先
 <meta property="og:site_name" content="瓦力仓库">
 <meta property="og:description" content="gen_server和gen_server2的区别gen_server 请求先进入内部队列，然后进入recevie进行操作直到返回再对下一个请求进行操作。
 gen_server2 与gen_server相比 多了一个外部队列，进来的请求会先进入外部队列，进程循环发现内部队列为空时，会将外部队列的请求导入内部队列。然后内部进行处理直到内部队列为空，会再一次从外部队列中将请求列表导入内部队列">
-<meta property="og:updated_time" content="2017-03-22T06:46:40.000Z">
+<meta property="og:updated_time" content="2017-03-31T09:59:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="gen_server和gen_server2的区别">
 <meta name="twitter:description" content="gen_server和gen_server2的区别gen_server 请求先进入内部队列，然后进入recevie进行操作直到返回再对下一个请求进行操作。
@@ -218,22 +218,32 @@ gen_server2 与gen_server相比 多了一个外部队列，进来的请求会先
         </li>
       
         
+        <li class="menu-item menu-item-tech">
+          <a href="/categories/技术/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-laptop"></i> <br />
+            
+            技术
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-life">
+          <a href="/categories/生活/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-coffee"></i> <br />
+            
+            生活
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
             
             分类
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
           </a>
         </li>
       
@@ -373,7 +383,18 @@ gen_server2 与gen_server相比 多了一个外部队列，进来的请求会先
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/erlang/" itemprop="url" rel="index">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/erlang/" itemprop="url" rel="index">
                     <span itemprop="name">erlang</span>
                   </a>
                 </span>
@@ -550,8 +571,8 @@ gen_server2 与gen_server相比 多了一个外部队列，进来的请求会先
 
           
             <div class="site-state-item site-state-posts">
-              <a href="/archives">
-                <span class="site-state-item-count">10</span>
+              <a href="/">
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -562,7 +583,7 @@ gen_server2 与gen_server相比 多了一个外部队列，进来的请求会先
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -573,7 +594,7 @@ gen_server2 与gen_server相比 多了一个外部队列，进来的请求会先
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

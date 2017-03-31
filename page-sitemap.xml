@@ -7,22 +7,22 @@
     </url>
     
     <url>
+        <loc>https://www.wallestore.com/life/</loc>
+        <lastmod>2017-03-31T10:22:34.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
+        <loc>https://www.wallestore.com/tech/</loc>
+        <lastmod>2017-03-31T09:57:38.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
         <loc>https://www.wallestore.com/404.html</loc>
         <lastmod>2017-03-31T07:16:40.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
-    <url>
-        <loc>https://www.wallestore.com/life/</loc>
-        <lastmod>2017-03-09T07:54:12.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
-    <url>
-        <loc>https://www.wallestore.com/life/%E8%BF%99%E4%BA%8B%E4%B8%80%E7%AF%87%E8%A7%86%E9%A2%91%E6%96%87%E7%AB%A0.html</loc>
-        <lastmod>2017-03-09T07:53:49.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -37,20 +37,6 @@
     <url>
         <loc>https://www.wallestore.com/tags/</loc>
         <lastmod>2017-03-09T07:34:06.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
-    <url>
-        <loc>https://www.wallestore.com/life/blog201701.html</loc>
-        <lastmod>2017-01-21T10:14:51.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
-    <url>
-        <loc>https://www.wallestore.com/tech/</loc>
-        <lastmod>2017-01-21T05:51:40.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
