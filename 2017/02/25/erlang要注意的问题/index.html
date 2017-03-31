@@ -1,0 +1,937 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="erlang,问题总结," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="瓦力仓库" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="1.确保没有编译警告2.Erlang 中 String 通过 list实现，32位系统中，其1个字符占用8字节空间(4个保存value,4个保存指针).因此string速度较慢 占用空间大3.在server中，尽量书写尾递归函数4.使用++时，left list 会被拷贝到 right list 头部 因此最好把 length 较短的放 left list5.避免使用regexp,如果需要正则表达">
+<meta property="og:type" content="article">
+<meta property="og:title" content="erlang要注意的问题总结">
+<meta property="og:url" content="https://www.wallestore.cn/2017/02/25/erlang要注意的问题/index.html">
+<meta property="og:site_name" content="瓦力仓库">
+<meta property="og:description" content="1.确保没有编译警告2.Erlang 中 String 通过 list实现，32位系统中，其1个字符占用8字节空间(4个保存value,4个保存指针).因此string速度较慢 占用空间大3.在server中，尽量书写尾递归函数4.使用++时，left list 会被拷贝到 right list 头部 因此最好把 length 较短的放 left list5.避免使用regexp,如果需要正则表达">
+<meta property="og:updated_time" content="2017-03-09T08:32:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="erlang要注意的问题总结">
+<meta name="twitter:description" content="1.确保没有编译警告2.Erlang 中 String 通过 list实现，32位系统中，其1个字符占用8字节空间(4个保存value,4个保存指针).因此string速度较慢 占用空间大3.在server中，尽量书写尾递归函数4.使用++时，left list 会被拷贝到 right list 头部 因此最好把 length 较短的放 left list5.避免使用regexp,如果需要正则表达">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LOA9MWULM0',
+      apiKey: '45b4ca919f4dd8872392baf554edbfed',
+      indexName: 'wallestore_index',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"请输入关键字","hits_empty":"没有找到相关内容: ${query}","hits_stats":"${hits} 条相关记录，用时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://www.wallestore.cn/2017/02/25/erlang要注意的问题/"/>
+
+
+
+
+
+  <title> erlang要注意的问题总结 | 瓦力仓库 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e7618fd8649490dc7f87f2bfdd4d0cbf";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">瓦力仓库</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://www.wallestore.cn/2017/02/25/erlang要注意的问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ken">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瓦力仓库">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                erlang要注意的问题总结
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-25T11:10:31+08:00">
+                2017-02-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/erlang/" itemprop="url" rel="index">
+                    <span itemprop="name">erlang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/02/25/erlang要注意的问题/" class="leancloud_visitors" data-flag-title="erlang要注意的问题总结">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>1.确保没有编译警告<br>2.Erlang 中 String 通过 list实现，32位系统中，其1个字符占用8字节空间(4个保存value,4个保存指针).因此string速度较慢 占用空间大<br>3.在server中，尽量书写尾递归函数<br>4.使用++时，left list 会被拷贝到 right list 头部 因此最好把 length 较短的放 left list<br>5.避免使用regexp,如果需要正则表达式，请使用re<br>6.timer模块的大部分函数实现，依赖于一个process，如果过多使用timer，会导致process负载过大影响效率。推荐使用 erlang:send_after/3及erlang:start_timer/3<br>7.避免使用list_to_atom/1,因为erlang中atom的最大数量为1048576，且不进行GC控制。因此如果持续调用list_to_atom 很容易达到系统上线，从而导致emulatorterminate 请使用list_to_existing_atom/1<br>8.list内部实现为一个列表，因此length(List)需要便利整个列表比较耗时。<br>9.对于不同的数据类型，使用不同的size函数:tuple_size/1,byte_size/1,bit_size<br>10.使用binary match 来进行binary的分割，而不是用 split binary/2<br>11．如果两个list都拥有很多数据，那么请不要使用‘—’,而是将数据转化为ordsets,然后调用ordsets:substract/2<br><a id="more"></a><br>12.对于binary相关操作可以进行binary优化(bin_opt_info编译选项)代码框架:<br>     f(&lt;<pattern1,...,rest bits="">&gt;,…) -&gt;<br>       … % Rest is not used here<br>       f(Rest,…);<br>    f(&lt;<pattern2,...,rest bits="">&gt;,…) -&gt;<br>      … % Rest is not used here<br>      f(Rest,…);<br>    …<br>    f(&lt;&lt;&gt;&gt;, …) -&gt;<br>      ReturnValue.</pattern2,...,rest></pattern1,...,rest></p>
+<p>13.调用lists:flatten/1可以将list扁平化,这个操作代价很大，比‘++’还要昂贵。下面这些时候可以避免： 数据发送给port时 调用list_to_binary/1 和 binary_to_list<br>14.小的函数可以让您方便的找出错误的函数代码。<br>15.不要在同一行出现相同的符号<br>20    some_fun() -&gt;<br>21       L = [{key1, v1}, {key2, [some_record#v21, v22]}],<br>22      …<br>编译时，会提示line 21 ‘[‘ 语法错误， 因为21行有多个 ‘[‘ ，所以这个bug不能准确定位，你需要花时间去排查代码。<br>好的做法是：<br>20 some_fun() -&gt;<br>21      L = [{key1, v1},<br>22            {key2, [some_record#v21, v22]}<br>23            ],<br>这样，编译其会提示你 line 22 ‘[‘ 语法错误，你很开就知道是那个地方错了。<br>16.使用 CTRL+\或者init:stop(),可以退出erlang，使用CTRL+G及CTRL+C可以弹出菜单选项。其中CTRL+G可以用来连接其他的shell，CTRL+C可以查看其他一些系统信息CTRL+C abort是野蛮的退出方式<br>17.通过code：clash/0检测代码中是否有module冲突现象 sticky<br>18.epmd –d –d启动epmd 可以查看erlangnode之间的通讯<br>19.将正常的逻辑代码和错误代码分离，发生错误时，尽管错误。由另一个错误处理模块进行处理<br>20.类似于操作系统，我们的程序也可分为kernel和user两层。对于kernel 绝对不能出现错误，对于user可以出现错误 ，进行恢复。<br>21.process 顶层loop涉及设计的代码及函数，最好在一个module中实现<br>22.process的register name和module名称一致，便于寻找代码<br>23.每个process具有一个单一的角色，比如supervisor用来进行错误恢复，work工作者，可以出现错误，trusted worker 不会出现错误。<br>24.通过函数调用可以实现的功能，就不要使用server实现(gen_server及类似的loop实现)<br>25.给消息加一个tag，在发生错误的时候，可以定位到消息，同时也有利于程序的稳健<br>26.在消息循环中，对于unknown的消息，请调用lib:flush<em>receive/0将其清除，减轻process msg queue的长度<br>27.server中总是书写尾递归的循环<br>28.尽量使用record，而不是原始的tuple来表现数据结构，在使用record时，使用select match：#person{name=Name,age=Age}=Person<br>29.对于返回值，最好也添加一个tag，用来说明返回值类型，或者执行成功与否<br>30.尽可能少的使用try catch ，在erlang程序中，不推荐主动捕获异常。只有当我们的逻辑特别复杂，我们可以使用throw来返回数据，使用catch来获取返回值。<br>31.当然程序与外界交互，外界数据不可靠时，需要使用catch和try<br>32.慎重使用process dictory，当你使用get/1、put/1时，你的应用会具有很大的slide effect。可以通过加入一个新的参数来保存原来需要存储到 process dictory中数据<br>33.如果不想使自己糊涂，请不要使用import<br>34.使用export时，将功能类似的接口组合在一起，并添加合理的注释，这样你的接口更清晰，别人使用起来方便<br>35.不要书写嵌套太深的代码。<br>36.不要书写太长的module<br>37.不要书写太长的函数<br>38.每行代码不要太长<br>39.避免使用“</em>”匿名变量，请为每个变量选择有意义的名称，如果某个变量暂时不使用，请以下划线“_”开始<br>40.{error,enfile}enfile error in socket 是因为 linux系统中 ulimit限制，在root下 修改ulimit –n 25000<br>41.在erlang开发时，慎重使用macro，因为erlang的single assign的缘故，同时调用某个macro，而macro又定义了某个变量，可能导致badmatch错误。比如：<br>-define(ADDLINEINFO1(F),<br>        (<br>        begin<br>        Str1 = lists:concat([“[Mod:”, ?MODULE, “ Line:”, ?LINE, “]”]),<br>        Str1 ++ F<br>        end<br>        )).<br>-define(WARN(Log, F, D), log4erl:warn(Log, ?ADDLINEINFO(F), D)).<br>如果连续使用 WARN, 会出现此错误<br>42.erlang中可以定义很多环境变量：<br>     ERL_MAX_ETS_TABLES 设置最大的ets数目默认1400<br>     ERL_MAX_PORTS erlang 最大的port数目 默认1024<br>43.*.app文件中的start_phases，选项既可以用来作为include applications 之间的同步启动，也可以用来对单个application 进行分布启动。顺序如下：<br>     包含include app：<br>     application:start(prim_app)<br>=&gt; prim_app_cb:start(normal, [])<br>=&gt; prim_app_cb:start_phase(init, normal, [])<br>=&gt; prim_app_cb:start_phase(go, normal, [])<br>=&gt; incl_app_cb:start_phase(go, normal, [])<br>ok<br>无included app:<br>application:start(prim_app)<br>=&gt; prim_app_cb:start(normal, [])<br>=&gt; prim_app_cb:start_phase(init, normal, [])<br>=&gt; prim_app_cb:start_phase(go, normal, [])<br>ok</p>
+<p>44.任何时候，都要重视函数的返回值，通过match确保您的预期，如果发生错误，那么就大胆的表达出来。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/erlang/" rel="tag"># erlang</a>
+          
+            <a href="/tags/问题总结/" rel="tag"># 问题总结</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/23/erlang安装/" rel="next" title="erlang安装教程">
+                <i class="fa fa-chevron-left"></i> erlang安装教程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/17/go的开发环境-liteide 调试/" rel="prev" title="liteide安装gdb">
+                liteide安装gdb <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yNzgyOS80NDA1"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="ken" />
+          <p class="site-author-name" itemprop="name">ken</p>
+           
+              <p class="site-description motion-element" itemprop="description">逃离雾霾， 寻找蓝天</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/wallestore" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:wallestore@hotmail.com" target="_blank" title="Mail">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Mail
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/wallestore" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ken</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("dnrwI8sIQcdRpOfCAMmv9num-gzGzoHsz", "cS2I0dYRhBOVweKLMpP24Yk0");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+</body>
+</html>
