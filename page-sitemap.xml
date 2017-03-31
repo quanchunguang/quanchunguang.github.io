@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="sitemap.xsl"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://www.wallestore.cn</loc>
+        <loc>https://www.wallestore.com</loc>
         <changefreq>daily</changefreq>
         <priority>1</priority>
     </url>
     
     <url>
-        <loc>https://www.wallestore.cn/life/</loc>
+        <loc>https://www.wallestore.com/life/</loc>
         <lastmod>2017-03-09T07:54:12.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     
     <url>
-        <loc>https://www.wallestore.cn/life/%E8%BF%99%E4%BA%8B%E4%B8%80%E7%AF%87%E8%A7%86%E9%A2%91%E6%96%87%E7%AB%A0.html</loc>
+        <loc>https://www.wallestore.com/life/%E8%BF%99%E4%BA%8B%E4%B8%80%E7%AF%87%E8%A7%86%E9%A2%91%E6%96%87%E7%AB%A0.html</loc>
         <lastmod>2017-03-09T07:53:49.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     
     <url>
-        <loc>https://www.wallestore.cn/categories/</loc>
+        <loc>https://www.wallestore.com/categories/</loc>
         <lastmod>2017-03-09T07:45:14.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     
     <url>
-        <loc>https://www.wallestore.cn/tags/</loc>
+        <loc>https://www.wallestore.com/tags/</loc>
         <lastmod>2017-03-09T07:34:06.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     
     <url>
-        <loc>https://www.wallestore.cn/life/blog201701.html</loc>
+        <loc>https://www.wallestore.com/life/blog201701.html</loc>
         <lastmod>2017-01-21T10:14:51.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     
     <url>
-        <loc>https://www.wallestore.cn/tech/</loc>
+        <loc>https://www.wallestore.com/tech/</loc>
         <lastmod>2017-01-21T05:51:40.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
