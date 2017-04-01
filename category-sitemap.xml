@@ -7,13 +7,6 @@
     </url>
 
     <url>
-        <loc>https://www.wallestore.com/categories/%E7%94%9F%E6%B4%BB/</loc>
-        <lastmod>2017-03-31T09:58:53.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>https://www.wallestore.com/categories/%E6%8A%80%E6%9C%AF/erlang/</loc>
         <lastmod>2017-03-31T09:59:27.000Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -44,6 +37,13 @@
     <url>
         <loc>https://www.wallestore.com/categories/%E6%8A%80%E6%9C%AF/TCP-IP%E5%8D%8F%E8%AE%AE/</loc>
         <lastmod>2017-03-31T10:00:30.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>https://www.wallestore.com/categories/%E7%94%9F%E6%B4%BB/</loc>
+        <lastmod>2017-04-01T02:48:14.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
