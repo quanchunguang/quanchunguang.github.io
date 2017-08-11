@@ -141,6 +141,30 @@
   </entry>
   
   <entry>
+    <title>golang开发框架framework</title>
+    <link href="https://www.wallestore.com/2017/03/17/go%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE-framework/"/>
+    <id>https://www.wallestore.com/2017/03/17/go开源项目-framework/</id>
+    <published>2017-03-17T06:18:23.000Z</published>
+    <updated>2017-08-11T08:14:20.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;开始在工作中使用go有一个月了， 写了一个golang的framework， 能够很方便的加载到项目中，而且简短的几行代码就能帮助你把服务跑起来&lt;br&gt;项目地址: &lt;a href=&quot;https://github.com/wallestore/framework&quot; targe
+    
+    </summary>
+    
+      <category term="技术" scheme="https://www.wallestore.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+      <category term="go" scheme="https://www.wallestore.com/categories/%E6%8A%80%E6%9C%AF/go/"/>
+    
+    
+      <category term="go" scheme="https://www.wallestore.com/tags/go/"/>
+    
+      <category term="framework" scheme="https://www.wallestore.com/tags/framework/"/>
+    
+  </entry>
+  
+  <entry>
     <title>erlang要注意的问题总结</title>
     <link href="https://www.wallestore.com/2017/02/25/erlang%E8%A6%81%E6%B3%A8%E6%84%8F%E7%9A%84%E9%97%AE%E9%A2%98/"/>
     <id>https://www.wallestore.com/2017/02/25/erlang要注意的问题/</id>

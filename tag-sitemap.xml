@@ -100,13 +100,6 @@
     </url>
 
     <url>
-        <loc>https://www.wallestore.com/tags/go/</loc>
-        <lastmod>2017-03-31T10:00:07.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>https://www.wallestore.com/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/</loc>
         <lastmod>2017-03-31T10:00:07.000Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -137,6 +130,20 @@
     <url>
         <loc>https://www.wallestore.com/tags/socket/</loc>
         <lastmod>2017-03-31T10:00:30.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>https://www.wallestore.com/tags/go/</loc>
+        <lastmod>2017-08-11T08:14:20.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>https://www.wallestore.com/tags/framework/</loc>
+        <lastmod>2017-08-11T08:14:20.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
